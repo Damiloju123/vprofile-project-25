@@ -29,7 +29,7 @@ pipeline {
                 archiveArtifacts artifacts: '**/*.war'
                 }
             }
-        } s
+        }
         stage('Test') {
             steps {
                 sh 'mvn -s settings.xml test'
