@@ -4,34 +4,34 @@ pipeline {
         jdk "JDK17"
         maven "MAVEN"
     }
-    
+
     environment {
         SNAP_REPO = 'vprofile-snapshot'
-		NEXUS_USER = 'admin'
-		NEXUS_PASS = 'admin123'
-		RELEASE_REPO = 'vprofile-release'
-		CENTRAL_REPO = 'vpro-maven-central'
-		NEXUSIP = '172.31.89.115'
-		NEXUSPORT = '8081'
-		NEXUS_GRP_REPO = 'vpro-maven-group'
+        NEXUS_USER = 'admin'
+        NEXUS_PASS = 'admin123'
+        RELEASE_REPO = 'vprofile-release'
+        CENTRAL_REPO = 'vpro-maven-central'
+        NEXUSIP = '172.31.89.115'
+        NEXUSPORT = '8081'
+        NEXUS_GRP_REPO = 'vpro-maven-group'
         NEXUS_LOGIN = 'nexuslogin'
         SONARSERVER = 'sonarserver'
         SONARSCANNER = 'sonarscanner'
     }
 
     stages {
-        stage('Build'){
+        stage('Build') {
             steps {
                 sh 'mvn -s settings.xml -DskipTests install'
             }
-
             post {
-                 success {
-                echo 'Now Archiving'
-                archiveArtifacts artifacts: '**/*.war'
+                success {
+                    echo 'Now Archiving'
+                    archiveArtifacts artifacts: '**/*.war'
                 }
             }
         }
+
         stage('Test') {
             steps {
                 sh 'mvn -s settings.xml test'
@@ -40,13 +40,16 @@ pipeline {
 
         stage('Checkstyle Analysis') {
             steps {
-                sh 'mvn -s settings.xml checkstyle:checkstyle'               
+                sh 'mvn -s settings.xml checkstyle:checkstyle'
+            }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool name: "${SONARSCANNER}", type: 'hudson.plugins.sonar.SonarRunnerInstallation'\
+                    // Resolve SonarScanner tool location
+                    def scannerHome = tool name: "${SONARSCANNER}", type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+
                     // Execute SonarQube scan
                     withSonarQubeEnv("${SONARSERVER}") {
                         sh """${scannerHome}/bin/sonar-scanner \
