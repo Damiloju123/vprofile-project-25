@@ -1,5 +1,8 @@
 name: Hprofile Actions
-on: workflow_dispatch
+
+on: 
+  workflow_dispatch
+
 jobs:
   Testing:
     runs-on: ubuntu-latest
@@ -7,10 +10,10 @@ jobs:
       - name: Code checkout
         uses: actions/checkout@v4
 
-      - name: Maven
+      - name: Run Maven tests
         run: mvn test
-      
-      - name: Checkstyle
+
+      - name: Run Checkstyle
         run: mvn checkstyle:checkstyle
 
       - name: Set Java 11
@@ -19,19 +22,18 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - name: Setup SonarQube
+      - name: Setup SonarScanner
         uses: warchant/setup-sonar-scanner@v7
 
-      # Run sonar-scanner   
-      - name: SonarQube Scan
-        run: sonar-scanner
-           -Dsonar.host.url=${{ secrets.SONAR_URL }}
-           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-           -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-           -Dsonar.sources=src/
-           -Dsonar.junit.reportsPath=target/surefire-reports/
-           -Dsonar.jacoco.reportsPath=target/jacoco.exec
-           -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
-           -Dsonar.java.binaries=target/test-classes/com/visualpathit/account
-           
+      - name: Run SonarQube Scan
+        run: |
+          sonar-scanner \
+            -Dsonar.host.url=${{ secrets.SONAR_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+            -Dsonar.sources=src/ \
+            -Dsonar.junit.reportsPath=target/surefire-reports/ \
+            -Dsonar.jacoco.reportPaths=target/jacoco.exec \
+            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml \
+            -Dsonar.java.binaries=target/test-classes/com/visualpathit/account
