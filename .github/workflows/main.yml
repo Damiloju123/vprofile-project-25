@@ -71,7 +71,7 @@ jobs:
          repo: actapp
          region: ${{ env.AWS_REGION }}
          tags: latest,${{ github.run_number }}
-         daemon_off: false
+         daemon_off: true
          dockerfile: ./Dockerfile
          context: ./
 
