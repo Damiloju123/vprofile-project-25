@@ -1,5 +1,5 @@
 FROM openjdk:17 AS BUILD_IMAGE
-RUN apt-get update && apt-get install maven -y
+RUN apt-get update && apt install maven -y
 COPY ./ vprofile-project-25/
 RUN cd vprofile-project-25 && mvn install
 
