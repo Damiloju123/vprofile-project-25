@@ -1,7 +1,7 @@
 name: Hprofile Actions
 on: workflow_dispatch
 env:
-  AWS_REGION: us-east-2
+  AWS_REGION: us-east-1
 jobs:
   Testing:
     runs-on: ubuntu-latest
