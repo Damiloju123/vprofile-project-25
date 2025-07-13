@@ -1,7 +1,7 @@
-FROM openjdk:17-slim AS BUILD_IMAGE
-RUN apt-get update && apt-get install -y maven
-COPY ./ vprofile-project-25
-RUN cd vprofile-project-25 && mvn install
+FROM openjdk:17-jdk-slim AS BUILD_IMAGE
+RUN apt update && apt install maven -y
+COPY ./ vprofile-project
+RUN cd vprofile-project &&  mvn install 
 
 FROM tomcat:9-jre11
 LABEL "Project"="Vprofile"
