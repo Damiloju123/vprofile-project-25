@@ -1,9 +1,9 @@
-FROM openjdk:17-slim AS BUILD_IMAGE
+FROM openjdk:11 AS BUILD_IMAGE
 RUN apt update && apt install maven -y
-COPY ./ vprofile-project-25/
+COPY ./ vprofile-project-25
 RUN cd vprofile-project-25 && mvn install
 
-FROM tomcat:9-jdk17
+FROM tomcat:9-jre11
 LABEL "Project"="Vprofile"
 LABEL "Author"="Imran"
 RUN rm -rf /usr/local/tomcat/webapps/*
